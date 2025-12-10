@@ -28,14 +28,8 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
 
-      - name: Terraform Init
-        run: |
-          terraform init \
-            -var-file="./config/variables.tfvars" \
-            -backend-config="./config/backend.conf"
+      - name: Terraform Validate
+        run: terraform validate
 
       - name: Terraform Format
         run: terraform fmt -recursive -check
-
-      - name: Terraform Validate
-        run: terraform validate
