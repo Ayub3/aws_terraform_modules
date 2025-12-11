@@ -9,21 +9,35 @@ variable "aws_vpc" {
 }
 
 variable "public_cidr_block" {
-  type    = list(string)
-  default = []
+  default = [
+    "10.0.1.0/24",
+    "10.0.2.0/24"
+  ]
+  type = list(string)
 }
 
 variable "private_cidr_block" {
-  type    = list(string)
-  default = []
-}
-
-variable "database_cidr_block" {
-  type    = list(string)
-  default = []
+  default = [
+    # "10.0.11.0/24",
+    # "10.0.22.0/24"
+  ]
+  type = list(string)
 }
 
 variable "availability_zone" {
-  type    = list(string)
-  default = []
+  default = [
+    "eu-west-2a",
+    "eu-west-2b",
+  ]
+  type = list(string)
+}
+
+variable "create_nat_gateway" {
+  type    = bool
+  default = false
+}
+
+variable "create_internet_gateway" {
+  type    = bool
+  default = true
 }
