@@ -55,8 +55,9 @@ resource "aws_nat_gateway" "ngw" {
 # Route tables
 
 resource "aws_route_table" "public_rt" {
-  count  = length(var.public_cidr_block)
-  vpc_id = aws_vpc.vpc.id
+  depends_on = [aws_subnet.private_subnet]
+  count      = length(var.public_cidr_block)
+  vpc_id     = aws_vpc.vpc.id
 
   route {
     cidr_block = "0.0.0.0/0"
@@ -67,13 +68,13 @@ resource "aws_route_table" "public_rt" {
 }
 
 resource "aws_route_table" "private_rt" {
-  depends_on = [aws_nat_gateway.ngw]
+  depends_on = [aws_subnet.private_subnet]
   count      = length(var.private_cidr_block)
   vpc_id     = aws_vpc.vpc.id
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_nat_gateway.ngw[0].id
+    gateway_id = aws_nat_gateway.ngw[count.index].id
   }
 
   tags = var.aws_vpc.tags
