@@ -18,12 +18,12 @@ variable "private_cidr_block" {
   default = []
 }
 
-variable "database_cidr_block" {
+variable "availability_zone" {
   type    = list(string)
   default = []
 }
 
-variable "availability_zone" {
-  type    = list(string)
-  default = []
+variable "create_nat_gateway" {
+  type    = bool
+  default = false
 }
