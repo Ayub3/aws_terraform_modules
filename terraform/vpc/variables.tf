@@ -34,7 +34,7 @@ variable "availability_zone" {
 
 variable "create_nat_gateway" {
   type    = bool
-  default = true
+  default = false
 }
 
 variable "create_internet_gateway" {
