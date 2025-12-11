@@ -10,10 +10,10 @@ resource "aws_vpc" "vpc" {
 # Subnets
 
 resource "aws_subnet" "public_subnet" {
-  count             = length(var.public_cidr_block)
-  vpc_id            = aws_vpc.vpc.id
-  cidr_block        = var.public_cidr_block[count.index]
-  availability_zone = var.availability_zone[count.index]
+  count                   = length(var.public_cidr_block)
+  vpc_id                  = aws_vpc.vpc.id
+  cidr_block              = var.public_cidr_block[count.index]
+  availability_zone       = var.availability_zone[count.index]
   map_public_ip_on_launch = true
 
   tags = var.aws_vpc.tags
@@ -30,7 +30,7 @@ resource "aws_subnet" "private_subnet" {
 # Gateways - Module doesn't create any private Nat Gateways
 
 resource "aws_internet_gateway" "igw" {
-  count  = length(var.public_cidr_block) > 0 ? 1 : 0
+  count  = var.create_internet_gateway ? 1 : 0
   vpc_id = aws_vpc.vpc.id
 
   tags = var.aws_vpc.tags
@@ -60,16 +60,16 @@ resource "aws_route_table" "public_rt" {
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.igw[count.index].id
+    gateway_id = aws_internet_gateway.igw.id
   }
 
   tags = var.aws_vpc.tags
 }
 
 resource "aws_route_table" "private_rt" {
-  depends_on = [ aws_nat_gateway.ngw ]
-  count  = length(var.private_cidr_block)
-  vpc_id = aws_vpc.vpc.id
+  depends_on = [aws_nat_gateway.ngw]
+  count      = length(var.private_cidr_block)
+  vpc_id     = aws_vpc.vpc.id
 
   route {
     cidr_block = "0.0.0.0/0"
