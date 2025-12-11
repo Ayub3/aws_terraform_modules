@@ -36,14 +36,14 @@ resource "aws_internet_gateway" "igw" {
 }
 
 resource "aws_eip" "private_eip" {
-  count      = length(var.public_cidr_block) && length(var.private_cidr_block) > 0 && var.create_nat_gateway ? length(var.public_cidr_block) : 0
+  count      = var.create_nat_gateway ? length(var.public_cidr_block) : 0
   depends_on = [aws_internet_gateway.igw]
 
   tags = var.aws_vpc.tags
 }
 
 resource "aws_nat_gateway" "ngw" {
-  count      = length(var.public_cidr_block) && length(var.private_cidr_block) > 0 && var.create_nat_gateway ? length(var.public_cidr_block) : 0
+  count         = var.create_nat_gateway ? length(var.public_cidr_block) : 0
   depends_on    = [aws_internet_gateway.igw]
   subnet_id     = var.public_cidr_block[count.index].id
   allocation_id = aws_eip.private_eip[count.index].id
