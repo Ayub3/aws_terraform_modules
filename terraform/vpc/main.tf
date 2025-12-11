@@ -73,7 +73,7 @@ resource "aws_route_table" "private_rt" {
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_nat_gateway.ngw[count.index].id
+    gateway_id = aws_nat_gateway.ngw[0].id
   }
 
   tags = var.aws_vpc.tags
