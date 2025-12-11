@@ -15,7 +15,7 @@ resource "aws_subnet" "public_subnet" {
 
   map_public_ip_on_launch = true
 
-  tags = "fix"
+  tags = var.aws_vpc.tags
 }
 
 resource "aws_subnet" "private_subnet" {
@@ -23,7 +23,7 @@ resource "aws_subnet" "private_subnet" {
   vpc_id            = aws_vpc.vpc.id
   cidr_block        = var.private_cidr_block[count.index]
   availability_zone = var.availability_zone[count.index]
-  tags              = "fix"
+  tags              = var.aws_vpc.tags
 }
 
 # Gateways - it's not a private nat gateway but public
@@ -32,14 +32,14 @@ resource "aws_internet_gateway" "igw" {
   count  = length(var.public_cidr_block) > 0 ? 1 : 0
   vpc_id = aws_vpc.vpc.id
 
-  tags = "fix"
+  tags = var.aws_vpc.tags
 }
 
 resource "aws_eip" "private_eip" {
   count      = var.create_nat_gateway == true && length(var.public_cidr_block) && length(var.private_cidr_block) > 0 ? length(var.public_cidr_block) : 0
   depends_on = [aws_internet_gateway.igw]
 
-  tags = "fix"
+  tags = var.aws_vpc.tags
 }
 
 resource "aws_nat_gateway" "ngw" {
@@ -48,5 +48,5 @@ resource "aws_nat_gateway" "ngw" {
   subnet_id     = var.public_cidr_block[count.index].id
   allocation_id = aws_eip.private_eip[count.index].id
 
-  tags = "fix"
+  tags = var.aws_vpc.tags
 }
