@@ -11,9 +11,4 @@ module "vpc" {
       project = "${var.project}-vpc"
     }
   }
-
-  public_cidr_block  = ["10.0.0.0/24", "10.0.0.1/24"]
-  private_cidr_block = ["10.0.0.128/24", "10.0.0.127/24"]
-  availability_zone  = ["eu-west-2a", "eu-west-2b"]
-  create_nat_gateway = true
 }
