@@ -45,7 +45,7 @@ resource "aws_eip" "private_eip" {
 resource "aws_nat_gateway" "ngw" {
   count         = var.create_nat_gateway ? length(var.public_cidr_block) : 0
   depends_on    = [aws_internet_gateway.igw]
-  subnet_id     = var.public_cidr_block.id[count.index]
+  subnet_id     = var.public_cidr_block[count.index].id
   allocation_id = aws_eip.private_eip[count.index].id
 
   tags = var.aws_vpc.tags
