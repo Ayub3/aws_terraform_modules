@@ -18,8 +18,8 @@ variable "public_cidr_block" {
 
 variable "private_cidr_block" {
     default = [
-        "10.0.11.0/24",
-        "10.0.22.0/24"
+        # "10.0.11.0/24",
+        # "10.0.22.0/24"
     ]
     type = list(string)
 }
